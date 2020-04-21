@@ -31,7 +31,7 @@ function App() {
         <Route path="/settings" exact component={Settings} />
         <Route path="/pages" exact component={RegisterPage} />
     </div>
-  </BrowserRouter>
+
 
       <div >
         <header>
