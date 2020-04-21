@@ -8,11 +8,15 @@ import RegApp from './login-registrierung/RegApp';
 
 
 
+
+
 function App() {
   return (
     <>
 
     <BrowserRouter>
+   
+
       <div >
         <header>
           <h1 className="slideInLeft sticky">FitnessApp</h1>
@@ -24,7 +28,7 @@ function App() {
         <Route path="/startseite" exact component={Home} />
         <Route path="/" exact component={Login} />
         <Route path="/reg" exact component={RegApp} />
-        
+
       </Switch>
     </BrowserRouter>
 
