@@ -1,13 +1,13 @@
 
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Link, NavLink } from 'react-router-dom';
+import {  Route, Link, NavLink } from 'react-router-dom';
 import Home from '../pages/startseite/Home';
 import Ernaehrungstartseite from '../pages/ernaehrung-einkaufsliste/ErnaehrungStartseite';
 import Einkaufsliste from '../pages/ernaehrung-einkaufsliste/Einkaufsliste';
 import Sportstartseite from '../pages/sport/SportStartseite';
 import Settings from '../pages/option/Settings';
 import axios from 'axios';
-import logOut from '../pages/option/logOut'
+
 class Login extends Component {
 
     constructor(props) {
@@ -72,24 +72,11 @@ class Login extends Component {
 
                 }
 
-
-
-
-
             })
             .catch( err => console.log(err)
             )
 
-
-           
-
-
-
-
     }
-
-
-
 
     render() {
         return (
