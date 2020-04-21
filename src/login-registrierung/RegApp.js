@@ -88,7 +88,7 @@ function RegApp() {
 
                         Register
                     </button>
-                    <Link to="/login" className="btn btn-link">Cancel</Link>
+                    <Link to="/" className="btn btn-link">Cancel</Link>
                 </div>
             </form>
         </div>
