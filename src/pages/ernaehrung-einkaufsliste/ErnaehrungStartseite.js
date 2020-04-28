@@ -4,67 +4,67 @@ import axios from 'axios';
 function Ernaehrungstartseite() {
 
     const [entrySearch, setEntrySearch] = useState([{
-        essen: '',
-
+        essen: ''
     }])
     const [data, setData] = useState({ hits: [] });
     const [search, setSearch] = useState(false);
-
-    const [healthFilter, setHealthFilter] = useState({
-      tagValue: ''
-    })
-
-    const [searches, setSearches] = useState([]) // für string concat später
     const [checkboxState, setCheckboxState] = useState([]); //leeres Array
-
+    const [stringConcat, setStringConcat] = useState([]);
+    const [globalString, setGlobalString] = useState('');
 
     useEffect(() => {
       let checkboxState = [
-        {id: 'vegan', name: "tagValue"},  //wahlweise kann man stattdessen eigenständige isChecked-Values einbauen und auf diese checken
+        {id: 'vegan', name: "tagValue"},
         {id: 'sugar-conscious', name: "tagValue"},
         {id: 'low-carb', name: "tagValue"}
       ];
-
       setCheckboxState(
-        checkboxState.map(d => {
+        checkboxState.map(data => {
           return {
             select: false,
-            id: d.id,
-            name: d.name
+            id: data.id,
+            name: data.name
           };
         })
       );
     }, []);
 
-//ins handleSubmit schmeißen;
-// VERALTET?
-    // function getCheckboxValue(e) {
-    //   let name = e.target.name;
-    //   let value = e.target.id;
-    //   let arr1 = [];
-    //
-    //   //let string = `&health=${value}`;
-    //   // console.log(string);
-    //   //setChecked(checked => !checked);
-    //   console.log("before IF", checked);
-    //   if(checked) {
-    //     console.log("in IF", checked);
-    //     setHealthFilter(healthFilter => ({ ...healthFilter, [name]: value}));
-    //     setSearches(searches => searches.concat(value))
-    //     console.log("SEARCHES: ", searches);
-    //   } else {
-    //     console.log("in ELSE", checked);
-    //     setHealthFilter(healthFilter => ({ ...healthFilter, [name]: ''}));
-    //   }
-    //   console.log(healthFilter);
-    // }
+    function getTagValue(e) {
+      let checked = e.target.checked;
+
+      setCheckboxState(
+        checkboxState.map(data => {
+          if(e.target.id == data.id) {
+            data.select = checked;
+
+            if(checked === true) {
+              if (stringConcat.includes(data.id) == false) {
+                setStringConcat(stringConcat => stringConcat.concat(data.id));
+              }
+            } else {
+              let result = stringConcat.filter(el => el !== data.id);
+
+              if (result) {
+                setStringConcat(result);
+              }
+            }
+          }
+          return data;
+        })
+      );
+    }
+
+    function concatenateString() {
+      let theStringingBegin = "&health=";
+      theStringingBegin = theStringingBegin.concat(stringConcat.join("&health="));
+      setGlobalString(theStringingBegin);
+  }
 
     async function searchMeal() {
         const YOUR_APP_ID = '6ff3b59b';
         const YOUR_APP_KEY = '53f9547355139ebdda5640fee4c27c90';
         let ESSEN = entrySearch.essen;
-        let HEALTH_LABEL_STRING = `&health=${healthFilter.tagValue}`;
-        const result = await axios(`https://api.edamam.com/search?q=${ESSEN}&app_id=${YOUR_APP_ID}&app_key=${YOUR_APP_KEY}&from=0&to=10${HEALTH_LABEL_STRING}`);
+        const result = await axios(`https://api.edamam.com/search?q=${ESSEN}&app_id=${YOUR_APP_ID}&app_key=${YOUR_APP_KEY}&from=0&to=10${globalString}`);
         setData(result.data);
         console.log(data, "LÖLÖLÖL")
         console.log(result.data, "LALALA")
@@ -74,11 +74,11 @@ function Ernaehrungstartseite() {
         const { name, value } = e.target;
         setEntrySearch(entrySearch => ({ ...entrySearch, [name]: value }));
         console.log("CHANGES: ", entrySearch.essen);
-        console.log(healthFilter);
        // setSearch(false)
     }
 
     function handleSubmit(e) {
+        concatenateString();
         searchMeal();
         setSearch(true)
         console.log(data, "TEST");
@@ -94,25 +94,12 @@ function Ernaehrungstartseite() {
             <div>
                 Das ist die Ernährungs Startseite WhoopWhoop!
             </div>
-            {checkboxState.map((d, i) => (
-              <div key={d, i}>
-              {/* auslagern */}
-              <input onChange={e => {
-                let checked = e.target.checked;
-                setCheckboxState(
-                  checkboxState.map(data => {
-                    if (d.id === data.id) {
-                      data.select = checked;
-                    }
-                    console.log(data);
-                    return data;
-                  })
-                );
-              }}
-              type="checkbox" checked={d.select}/>
+            {checkboxState.map((tags, i) => (
+              <div key={tags, i}>
+              <p>{tags.id}</p>
+              <input id={tags.id} type="checkbox" checked={tags.select} onClick={getTagValue}/>
               </div>
               ))}
-
             {/* <button id="vegan" name="tagValue" value={checked} onClick={getCheckboxValue}>text</button>
              <button id="sugar-conscious" name="tagValuessss" value={checked} onClick={getCheckboxValue}>text2</button> */}
 
