@@ -16,7 +16,7 @@ function Ernaehrungstartseite() {
       let checkboxState = [
         {id: 'vegan', name: "tagValue"},
         {id: 'sugar-conscious', name: "tagValue"},
-        {id: 'low-carb', name: "tagValue"}
+        {id: 'milk-free', name: "tagValue"}
       ];
       setCheckboxState(
         checkboxState.map(data => {

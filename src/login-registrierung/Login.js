@@ -42,7 +42,11 @@ class Login extends Component {
     }
 
     logOut() {
-        sessionStorage.clear()
+        this.setState({
+            loggedIn: false
+           
+        })
+        localStorage.clear()
     }
     einLoggen(event) {
         event.preventDefault()
@@ -61,9 +65,10 @@ class Login extends Component {
                 for (let i = 0; i < response.data.length; i++) {
                     console.log("SERVER: " + response.data[i].username + response.data[i].passwort);
                     console.log("CLIENT: " + this.state.name + this.state.passwort);
+                    console.log(response.data[i]._id);
                     
                     if (response.data[i].username === this.state.name && response.data[i].passwort === this.state.passwort) {
-                        sessionStorage.setItem("loggedIn", '34ljk24lkjn32kjdnkj')
+                        localStorage.setItem("User", response.data[i]._id)
                         this.setState({
                             loggedIn: true
                         })
@@ -84,8 +89,7 @@ class Login extends Component {
 
 
 
-
-                {(sessionStorage.getItem("loggedIn") !== '34ljk24lkjn32kjdnkj') ?
+                {(this.state.loggedIn == false) ?
 
                     (< form onSubmit={this.einLoggen} className="schub2 slideInLeft"  >
 
