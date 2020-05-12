@@ -12,6 +12,7 @@ function RegApp() {
         alter: 0,
         groesse: 0,
         gewicht: 0,
+        geschlecht: 'undefined'
         
     });
 
