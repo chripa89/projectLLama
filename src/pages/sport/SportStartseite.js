@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import Navigation from "../../components/navigation.js";
 import axios from 'axios';
 
 function Sportstartseite() {
@@ -9,18 +9,18 @@ function Sportstartseite() {
 
     const clientID = '99eade906ced46bbb3239593426a47c0'
     const clientSecret = '0614b2d5e63e453b9ffd34d75849c17b'
-        
-      
+
+
       async function  authorize () {
-     
+
             let formData = new FormData();
             formData.append('grant_type', 'client_credentials');
             formData.append('user', clientID);
             formData.append('password', clientSecret);
             formData.append('scope', 'basic');
             console.log(formData);
-            
-    
+
+
             fetch('https://oauth.fatsecret.com/connect/token', {
                 method: 'POST',
                 headers: {
@@ -32,7 +32,7 @@ function Sportstartseite() {
             .then((responseData) => {
                 console.log(responseData);
             });
-       
+
         };
 
     function stateNotHookDUMDUM() {
@@ -45,9 +45,6 @@ function Sportstartseite() {
         <div>
           <Navigation />
         </div>
-            <nav>
-                <NavLink to="/loggedIn" exact>Startseite</NavLink> | <NavLink to="/eat">Ernährungs Übersicht</NavLink> | <NavLink to="/shoppinglist">Einkaufsliste</NavLink> | <NavLink to="/sport">Sport</NavLink> | <NavLink to="/settings">Option</NavLink> | <NavLink to="/" onClick={sessionStorage.clear()}>LogOut</NavLink>
-            </nav>
 
             <div>
 
