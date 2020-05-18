@@ -1,130 +1,225 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import axios from "axios";
+
 function Ernaehrungstartseite() {
+  const [entrySearch, setEntrySearch] = useState([
+    {
+      essen: "",
+    },
+  ]);
+  const [data, setData] = useState({ hits: [] });
+  const [search, setSearch] = useState(false);
+  const [checkboxState, setCheckboxState] = useState([]); //leeres Array
+  const [stringConcat, setStringConcat] = useState([]);
+  const [globalString, setGlobalString] = useState("");
 
-    const [entrySearch, setEntrySearch] = useState([{
-        essen: ''
-    }])
-    const [data, setData] = useState({ hits: [] });
-    const [search, setSearch] = useState(false);
-    const [checkboxState, setCheckboxState] = useState([]); //leeres Array
-    const [stringConcat, setStringConcat] = useState([]);
-    const [globalString, setGlobalString] = useState('');
+  useEffect(() => {
+    let checkboxState = [
+      { id: "alcohol-free", name: "tagValue" },
+      { id: "crustacean-free", name: "tagValue" },
+      { id: "shellfish-free", name: "tagValue" },
+      { id: "dairy-free", name: "tagValue" },
+      { id: "egg-free", name: "tagValue" },
+      { id: "fish-free", name: "tagValue" },
+      { id: "peanut-free", name: "tagValue" },
+      { id: "soy-free", name: "tagValue" },
+      { id: "gluten-free", name: "tagValue" },
+      { id: "keto-friendly", name: "tagValue" },
+      { id: "paleo", name: "tagValue" },
+      { id: "kosher", name: "tagValue" },
+      { id: "vegetarian", name: "tagValue" },
+      { id: "vegan", name: "tagValue" },
+      { id: "sugar-conscious", name: "tagValue" },
+      { id: "no-sugar", name: "tagValue" },
+      { id: "low-carb", name: "tagValue" },
+    ];
+    setCheckboxState(
+      checkboxState.map((data) => {
+        return {
+          select: false,
+          id: data.id,
+          name: data.name,
+        };
+      })
+    );
+  }, []);
 
-    useEffect(() => {
-      let checkboxState = [
-        {id: 'vegan', name: "tagValue"},
-        {id: 'sugar-conscious', name: "tagValue"},
-        {id: 'low-carb', name: "tagValue"}
-      ];
-      setCheckboxState(
-        checkboxState.map(data => {
-          return {
-            select: false,
-            id: data.id,
-            name: data.name
-          };
-        })
-      );
-    }, []);
+  function getTagValue(e) {
+    let checked = e.target.checked;
 
-    function getTagValue(e) {
-      let checked = e.target.checked;
+    setCheckboxState(
+      checkboxState.map((data) => {
+        if (e.target.id == data.id) {
+          data.select = checked;
 
-      setCheckboxState(
-        checkboxState.map(data => {
-          if(e.target.id == data.id) {
-            data.select = checked;
+          if (checked === true) {
+            if (stringConcat.includes(data.id) == false) {
+              setStringConcat((stringConcat) => stringConcat.concat(data.id));
+            }
+          } else {
+            let result = stringConcat.filter((el) => el !== data.id);
 
-            if(checked === true) {
-              if (stringConcat.includes(data.id) == false) {
-                setStringConcat(stringConcat => stringConcat.concat(data.id));
-              }
-            } else {
-              let result = stringConcat.filter(el => el !== data.id);
-
-              if (result) {
-                setStringConcat(result);
-              }
+            if (result) {
+              setStringConcat(result);
             }
           }
-          return data;
-        })
-      );
-    }
-
-    function concatenateString() {
-      let theStringingBegin = "&health=";
-      theStringingBegin = theStringingBegin.concat(stringConcat.join("&health="));
-      setGlobalString(theStringingBegin);
+        }
+        console.log(data);
+        return data;
+      })
+    );
   }
 
-    async function searchMeal() {
-        const YOUR_APP_ID = '6ff3b59b';
-        const YOUR_APP_KEY = '53f9547355139ebdda5640fee4c27c90';
-        let ESSEN = entrySearch.essen;
-        const result = await axios(`https://api.edamam.com/search?q=${ESSEN}&app_id=${YOUR_APP_ID}&app_key=${YOUR_APP_KEY}&from=0&to=10${globalString}`);
-        setData(result.data);
-        console.log(data, "LÖLÖLÖL")
-        console.log(result.data, "LALALA")
-          };
+  function concatenateString() {
+    let theStringingBegin = "&health=";
+    theStringingBegin = theStringingBegin.concat(stringConcat.join("&health="));
+    setGlobalString(theStringingBegin);
+  }
 
-    function getInput(e) {
-        const { name, value } = e.target;
-        setEntrySearch(entrySearch => ({ ...entrySearch, [name]: value }));
-        console.log("CHANGES: ", entrySearch.essen);
-       // setSearch(false)
+  async function searchMeal() {
+    const YOUR_APP_ID = "6ff3b59b";
+    const YOUR_APP_KEY = "53f9547355139ebdda5640fee4c27c90";
+    let ESSEN = entrySearch.essen;
+    const result = await axios(
+      `https://api.edamam.com/search?q=${ESSEN}&app_id=${YOUR_APP_ID}&app_key=${YOUR_APP_KEY}&from=0&to=10${globalString}`
+    );
+    setData(result.data);
+    console.log(data, "LÖLÖLÖL");
+    console.log(result.data, "LALALA");
+  }
+
+  function getInput(e) {
+    const { name, value } = e.target;
+    setEntrySearch((entrySearch) => ({ ...entrySearch, [name]: value }));
+    console.log("CHANGES: ", entrySearch.essen);
+    // setSearch(false)
+  }
+
+  function handleSubmit(e) {
+    concatenateString();
+    searchMeal();
+    setSearch(true);
+    console.log(data, "TEST");
+  }
+
+  function addChecked(e) {
+    let element = e.target;
+    let parent = element.parentNode;
+    console.log(parent);
+    parent.classList.toggle("isChecked");
+  }
+
+  function addNavClass() {
+    let nav = document.getElementById("navbar");
+    if (nav.className === "nav") {
+      nav.className += " responsive";
+    } else {
+      nav.className = "nav";
     }
+  }
 
-    function handleSubmit(e) {
-        concatenateString();
-        searchMeal();
-        setSearch(true)
-        console.log(data, "TEST");
-    }
+  return (
+    <>
+      <nav id="navbar" class="nav">
+        <div class="nav-item">
+          <NavLink to="/loggedIn" exact>
+            Startseite
+          </NavLink>
+        </div>
+        <div class="nav-item">
+          <NavLink to="/eat">Ernährungs Übersicht</NavLink>
+        </div>
+        <div class="nav-item">
+          <NavLink to="/shoppinglist">Einkaufsliste</NavLink>
+        </div>
+        <div class="nav-item">
+          <NavLink to="/sport">Sport</NavLink>
+        </div>
+        <div class="nav-item">
+          <NavLink to="/settings">Option</NavLink>
+        </div>
+        <div class="nav-item">
+          <NavLink to="/" onClick={sessionStorage.clear()}>
+            LogOut
+          </NavLink>
+        </div>
+        <div class="nav-item">
+          <a href="javascript:void(0);" class="icon" onClick={addNavClass}>
+            <i class="">icon</i>
+          </a>
+        </div>
+      </nav>
 
-    return (
-
-        <>
-            <nav>
-                <NavLink to="/loggedIn" exact>Startseite</NavLink> | <NavLink to="/eat">Ernährungs Übersicht</NavLink> | <NavLink to="/shoppinglist">Einkaufsliste</NavLink> | <NavLink to="/sport">Sport</NavLink> | <NavLink to="/settings">Option</NavLink> | <NavLink to="/" onClick={sessionStorage.clear()}>LogOut</NavLink>
-            </nav>
-            <br />
-            <div>
-                Das ist die Ernährungs Startseite WhoopWhoop!
-            </div>
-            {checkboxState.map((tags, i) => (
-              <div key={tags, i}>
-              <p>{tags.id}</p>
-              <input id={tags.id} type="checkbox" checked={tags.select} onClick={getTagValue}/>
-              </div>
-              ))}
-            {/* <button id="vegan" name="tagValue" value={checked} onClick={getCheckboxValue}>text</button>
+      <br />
+      <div>Das ist die Ernährungs Startseite WhoopWhoop!</div>
+      <div>
+        <div class="water-row">
+          <ul>
+            <li class="water-item" onClick={addChecked}>
+              <img src={require("./water-glass.svg")} />
+            </li>
+            <li class="water-item" onClick={addChecked}>
+              <img src={require("./water-glass.svg")} />
+            </li>
+            <li class="water-item" onClick={addChecked}>
+              <img src={require("./water-glass.svg")} />
+            </li>
+            <li class="water-item" onClick={addChecked}>
+              <img src={require("./water-glass.svg")} />
+            </li>
+            <li class="water-item" onClick={addChecked}>
+              <img src={require("./water-glass.svg")} />
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="checkboxes">
+        {checkboxState.map((tags, i) => (
+          <div key={(tags, i)} class="checkbox">
+            <input
+              id={tags.id}
+              class="filter-checkbox"
+              type="checkbox"
+              checked={tags.select}
+              onClick={getTagValue}
+            />
+            <span class="filter-wrapper">
+              <span class="filter-button"></span>
+              <span class="filter-content">{tags.id}</span>
+            </span>
+          </div>
+        ))}
+      </div>
+      {/* <button id="vegan" name="tagValue" value={checked} onClick={getCheckboxValue}>text</button>
              <button id="sugar-conscious" name="tagValuessss" value={checked} onClick={getCheckboxValue}>text2</button> */}
 
-            <input type="text" placeholder="Search..." name="essen" onChange={getInput}  />
-            <button onClick={handleSubmit}>
-                Search
-            </button >
-            <div>
-                {search &&
-                    <ul>
-                        {data.hits.map(item => (
-                            <li key={item.objectID}>
-                              <a href="">
-                                <p>{`${item.recipe.healthLabels}`}</p>
-                                <img src={item.recipe.image} alt="filler" />
-                                {`${item.recipe.label} || ${Math.floor(item.recipe.calories/ item.recipe.yield)} kCal pro Mahlzeit`}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                }
-            </div>
-        </>
-    );
+      <input
+        type="text"
+        placeholder="Search..."
+        name="essen"
+        onChange={getInput}
+      />
+      <button onClick={handleSubmit}>Search</button>
+      <div class="results">
+        {search && (
+          <ul>
+            {data.hits.map((item) => (
+              <li key={item.objectID}>
+                <a href="">
+                  <p>{`${item.recipe.healthLabels}`}</p>
+                  <img src={item.recipe.image} alt="filler" />
+                  <p>{`${item.recipe.label} || ${Math.floor(
+                    item.recipe.calories / item.recipe.yield
+                  )} kCal pro Mahlzeit`}</p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </>
+  );
 }
-
 
 export default Ernaehrungstartseite;

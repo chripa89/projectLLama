@@ -1,5 +1,6 @@
 import React from 'react';
-import './App.css';
+// import './App.css';
+import './styles/_main.scss';
 import { BrowserRouter, Route, Switch,NavLink } from 'react-router-dom';
 import Home from './pages/startseite/Home';
 import Login from './login-registrierung/Login';
@@ -26,7 +27,7 @@ function App() {
             <h1 className="slideInLeft sticky">FitnessApp</h1>
           </header>
         </div>
-      
+
 
         <Switch>
           <Route path="/loggedIn" exact component={Home} />
