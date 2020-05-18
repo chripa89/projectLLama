@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import Navigation from "../../components/navigation.js";
 import axios from "axios";
 
 function Ernaehrungstartseite() {
@@ -110,46 +110,11 @@ function Ernaehrungstartseite() {
     parent.classList.toggle("isChecked");
   }
 
-  function addNavClass() {
-    let nav = document.getElementById("navbar");
-    if (nav.className === "nav") {
-      nav.className += " responsive";
-    } else {
-      nav.className = "nav";
-    }
-  }
-
   return (
     <>
-      <nav id="navbar" class="nav">
-        <div class="nav-item">
-          <NavLink to="/loggedIn" exact>
-            Startseite
-          </NavLink>
-        </div>
-        <div class="nav-item">
-          <NavLink to="/eat">Ernährungs Übersicht</NavLink>
-        </div>
-        <div class="nav-item">
-          <NavLink to="/shoppinglist">Einkaufsliste</NavLink>
-        </div>
-        <div class="nav-item">
-          <NavLink to="/sport">Sport</NavLink>
-        </div>
-        <div class="nav-item">
-          <NavLink to="/settings">Option</NavLink>
-        </div>
-        <div class="nav-item">
-          <NavLink to="/" onClick={sessionStorage.clear()}>
-            LogOut
-          </NavLink>
-        </div>
-        <div class="nav-item">
-          <a href="javascript:void(0);" class="icon" onClick={addNavClass}>
-            <i class="">icon</i>
-          </a>
-        </div>
-      </nav>
+      <div>
+        <Navigation />
+      </div>
 
       <br />
       <div>Das ist die Ernährungs Startseite WhoopWhoop!</div>
