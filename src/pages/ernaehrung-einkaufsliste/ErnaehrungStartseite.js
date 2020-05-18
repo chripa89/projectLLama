@@ -149,6 +149,10 @@ function Ernaehrungstartseite() {
               checked={tags.select}
               onClick={getTagValue}
             />
+            {/*onClick={() => {
+              addChecked();
+              getTagValue();
+            }} */}
             <span class="filter-wrapper">
               <span class="filter-button"></span>
               <span class="filter-content">{tags.id}</span>
@@ -156,8 +160,6 @@ function Ernaehrungstartseite() {
           </div>
         ))}
       </div>
-      {/* <button id="vegan" name="tagValue" value={checked} onClick={getCheckboxValue}>text</button>
-             <button id="sugar-conscious" name="tagValuessss" value={checked} onClick={getCheckboxValue}>text2</button> */}
 
       <input
         type="text"
@@ -174,10 +176,11 @@ function Ernaehrungstartseite() {
                 <a href="">
                   <p>{`${item.recipe.healthLabels}`}</p>
                   <img src={item.recipe.image} alt="filler" />
-                  <p>{`${item.recipe.label} || ${Math.floor(
-                    item.recipe.calories / item.recipe.yield
-                  )} kCal pro Mahlzeit`}</p>
                 </a>
+                <div class="label-wrapper">
+                  <p class="label">{`${item.recipe.label}`}</p>
+                  <p class="label _calc">{`${Math.floor(item.recipe.calories / item.recipe.yield)} kCal pro Mahlzeit`}</p>
+                </div>
               </li>
             ))}
           </ul>
