@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 
 function Navigation() {
 
+
   function addNavClass() {
     let nav = document.getElementById("navbar");
     if (nav.className === "nav") {
@@ -11,6 +12,11 @@ function Navigation() {
       nav.className = "nav";
     }
   }
+
+  function logOut() {
+    
+    localStorage.clear()
+}
 
   return (
     <nav id="navbar" class="nav">
@@ -32,7 +38,7 @@ function Navigation() {
         <NavLink to="/settings">Option</NavLink>
       </div>
       <div class="nav-item">
-        <NavLink to="/" onClick={sessionStorage.clear()}>
+        <NavLink to="/" onClick={logOut}>
           LogOut
         </NavLink>
       </div>

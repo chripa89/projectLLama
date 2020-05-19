@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { NavLink, Route } from 'react-router-dom';
+
 import Navigation from "../../components/navigation.js";
-import Settings from '../option/Settings'
+
 import axios from 'axios';
 
 function Home() {
@@ -74,14 +74,14 @@ function Home() {
 
             if (user.geschlecht == 'mann') {
 
-                setUser(user => ({ ...user, kalorienGrundbedarf: 66.5  + (newGewicht * 13.75) + (user.groesse * 5) - (user.alter * 6.76) + 66.5 }));
+                setUser(user => ({ ...user, kalorienGrundbedarf: 66.5 + (newGewicht * 13.75) + (user.groesse * 5) - (user.alter * 6.76) + 66.5 }));
 
                 setUser(user => ({ ...user, leistungsUmsatz: user.kalorienGrundbedarf * (user.pal - 1) }))
                 console.log("FürMännerHoherBMI");
                 // console.log(response.data.kalorienGrundbedarf);
 
             } else {
-                setUser(user => ({ ...user, kalorienGrundbedarf: 655.1  +  (newGewicht * 9.56) + (user.groesse * 1.85) - (user.alter * 4.7)   }));
+                setUser(user => ({ ...user, kalorienGrundbedarf: 655.1 + (newGewicht * 9.56) + (user.groesse * 1.85) - (user.alter * 4.7) }));
 
                 setUser(user => ({ ...user, leistungsUmsatz: user.kalorienGrundbedarf * (user.pal - 1) }))
 
@@ -111,17 +111,15 @@ function Home() {
     return (
 
         <>
-        <div>
-          <Navigation />
-        </div>
+            <div>
+                <Navigation />
+            </div>
 
             <div>
 
                 <p>Guten Tag {user.username}</p>
 
-                <nav>
-                    <NavLink to="/loggedIn" exact>Startseite</NavLink> | <NavLink to="/eat">Ernährungs Übersicht</NavLink> | <NavLink to="/shoppinglist">Einkaufsliste</NavLink> | <NavLink to="/sport">Sport</NavLink> | <NavLink to="/settings">Option</NavLink> | <NavLink to="/" onClick={sessionStorage.clear()}>LogOut</NavLink>
-                </nav>
+
 
 
 

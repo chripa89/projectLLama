@@ -15,6 +15,7 @@ function Ernaehrungstartseite() {
   const [globalString, setGlobalString] = useState("");
 
   useEffect(() => {
+    concatenateString();
     let checkboxState = [
       { id: "alcohol-free", name: "tagValue" },
       { id: "crustacean-free", name: "tagValue" },
@@ -43,14 +44,14 @@ function Ernaehrungstartseite() {
         };
       })
     );
-  }, []);
+  }, [stringConcat]);
 
   function getTagValue(e) {
-    let checked = e.target.checked;
+    let checked = e.checked;
 
     setCheckboxState(
       checkboxState.map((data) => {
-        if (e.target.id == data.id) {
+        if (e.id == data.id) {
           data.select = checked;
 
           if (checked === true) {
@@ -81,6 +82,7 @@ function Ernaehrungstartseite() {
     const YOUR_APP_ID = "6ff3b59b";
     const YOUR_APP_KEY = "53f9547355139ebdda5640fee4c27c90";
     let ESSEN = entrySearch.essen;
+    console.log(globalString, 'GlobalString in Async');
     const result = await axios(
       `https://api.edamam.com/search?q=${ESSEN}&app_id=${YOUR_APP_ID}&app_key=${YOUR_APP_KEY}&from=0&to=10${globalString}`
     );
@@ -97,19 +99,27 @@ function Ernaehrungstartseite() {
   }
 
   function handleSubmit(e) {
-    concatenateString();
+   
     searchMeal();
     setSearch(true);
     console.log(data, "TEST");
   }
 
   function addChecked(e) {
-    let element = e.target;
+ 
+    let element = e;
     let parent = element.parentNode;
     console.log(parent);
     parent.classList.toggle("isChecked");
   }
 
+  function checkTag(e){
+    let element = e.target;
+    getTagValue(element);
+    addChecked(element);
+    
+
+  }
   return (
     <>
       <div>
@@ -147,12 +157,9 @@ function Ernaehrungstartseite() {
               class="filter-checkbox"
               type="checkbox"
               checked={tags.select}
-              onClick={getTagValue}
+              onChange={checkTag}
             />
-            {/*onClick={() => {
-              addChecked();
-              getTagValue();
-            }} */}
+            
             <span class="filter-wrapper">
               <span class="filter-button"></span>
               <span class="filter-content">{tags.id}</span>

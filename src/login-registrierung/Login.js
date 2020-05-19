@@ -1,12 +1,13 @@
 
-import React, { Component } from 'react';
-import {  Route, Link, NavLink } from 'react-router-dom';
-import Home from '../pages/startseite/Home';
-import Ernaehrungstartseite from '../pages/ernaehrung-einkaufsliste/ErnaehrungStartseite';
-import Einkaufsliste from '../pages/ernaehrung-einkaufsliste/Einkaufsliste';
-import Sportstartseite from '../pages/sport/SportStartseite';
-import Settings from '../pages/option/Settings';
+import React, { Component, useState, useEffect } from 'react';
+import { Route, Link, NavLink } from 'react-router-dom';
+
+import Startseite from '../pages/startseite/Home';
 import axios from 'axios';
+
+
+
+
 
 class Login extends Component {
 
@@ -15,22 +16,13 @@ class Login extends Component {
 
         this.einLoggen = this.einLoggen.bind(this);
         this.handleChangeLogin = this.handleChangeLogin.bind(this);
-        this.logOut = this.logOut.bind(this);
+
         this.state = {
-            name: '',
-            passwort: '',
-            groesse: '',
-            alter: '',
-            gewicht: '',
-            loggedIn: false,
-            index: ''
-
+            userTest: 'blabla'
         }
-
-
-
-
     }
+
+
 
     handleChangeLogin = (event) => {
         this.setState({
@@ -41,15 +33,11 @@ class Login extends Component {
             ))
     }
 
-    logOut() {
-        this.setState({
-            loggedIn: false
-           
-        })
-        localStorage.clear()
-    }
+
     einLoggen(event) {
         event.preventDefault()
+        console.log(this.state.userTest, 'UserTest');
+        console.log(localStorage.getItem('User'), 'LocalStorage');
 
         const user = {
 
@@ -66,11 +54,11 @@ class Login extends Component {
                     console.log("SERVER: " + response.data[i].username + response.data[i].passwort);
                     console.log("CLIENT: " + this.state.name + this.state.passwort);
                     console.log(response.data[i]._id);
-                    
+
                     if (response.data[i].username === this.state.name && response.data[i].passwort === this.state.passwort) {
                         localStorage.setItem("User", response.data[i]._id)
                         this.setState({
-                            loggedIn: true
+                            userTest: response.data[i]._id
                         })
                     } else console.log("FAIL TO LOGIN");
 
@@ -78,7 +66,7 @@ class Login extends Component {
                 }
 
             })
-            .catch( err => console.log(err)
+            .catch(err => console.log(err)
             )
 
     }
@@ -89,45 +77,32 @@ class Login extends Component {
 
 
 
-                {(this.state.loggedIn == false) ?
+                {(localStorage.getItem('User') === this.state.userTest) ? // back button relogin fixen
+                
+                    <Startseite />
 
-                    (< form onSubmit={this.einLoggen} className="schub2 slideInLeft"  >
+                    : (< form onSubmit={this.einLoggen} className="schub2 slideInLeft"  >
 
                         <h1>Project LLama</h1>
                         <h3>Fitness App</h3>
 
-                Login - Name<br />
+            Login - Name<br />
                         < input type="text" onChange={this.handleChangeLogin} placeholder="Login" id="name" />
                         <br />
-                Passwort<br />
+            Passwort<br />
                         < input type="password" onChange={this.handleChangeLogin} placeholder="Passwort" id="passwort" />
                         <br />
                         <button    >Login</button>
 
 
                         <br />
-                        {console.log(this.state.name + ' ' + this.state.passwort)}
+
                         <br />
                         <Link to="/reg">Registriere dich hier!</Link>
 
-                    </form >) :
+                    </form >)
 
-                    (<div>
-
-                        <h1>Project LLama</h1>
-                        <h3>Fitness App</h3>
-
-                        <nav>
-                            <NavLink to="/loggedIn" exact>Startseite</NavLink> | <NavLink to="/eat">Ernährungs Übersicht</NavLink> | <NavLink to="/shoppinglist">Einkaufsliste</NavLink> | <NavLink to="/sport">Sport</NavLink> | <NavLink to="/settings">Option</NavLink> | <NavLink to="/" onClick={this.logOut}>LogOut</NavLink>
-                        </nav>
-                        <Route path="/loggedIn" exact component={Home} />
-                        <Route path="/eat" exact component={Ernaehrungstartseite} />
-                        <Route path="/shoppinglist" exact component={Einkaufsliste} />
-                        <Route path="/sport" exact component={Sportstartseite} />
-                        <Route path="/settings" exact component={Settings} />
-                    
-
-                    </div>)}
+                }
 
             </React.Fragment>
         );
