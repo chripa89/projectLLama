@@ -16,6 +16,7 @@ function Ernaehrungstartseite() {
 
   useEffect(() => {
     concatenateString();
+   
     let checkboxState = [
       { id: "alcohol-free", name: "tagValue" },
       { id: "crustacean-free", name: "tagValue" },
@@ -90,6 +91,8 @@ function Ernaehrungstartseite() {
     console.log(data, "LÖLÖLÖL");
     console.log(result.data, "LALALA");
   }
+
+  
 
   function getInput(e) {
     const { name, value } = e.target;
